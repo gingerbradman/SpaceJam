@@ -7,6 +7,8 @@ TagManager:
   - Obstacle
   - ObstacleLine
   - Border
+  - Enemy
+  - Blank
   layers:
   - Default
   - TransparentFX
@@ -18,9 +20,9 @@ TagManager:
   - 
   - Border
   - ObstacleLine
-  - 
-  - 
-  - 
+  - Hazard
+  - Blank
+  - Player
   - 
   - 
   - 

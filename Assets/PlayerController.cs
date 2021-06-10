@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public void setR(Rigidbody2D rigidBody){ r = rigidBody;}
     private float horizontalMovement;
     private float verticalMovement;
+    GameManager_script gm;
     bool isWrappingX = false;
     bool isWrappingY = false;
 
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>();
         cam = Camera.main;
         viewportPosition = cam.WorldToViewportPoint(transform.position);
+        gm = FindObjectOfType<GameManager_script>();
     }
 
     // Update is called once per frame
@@ -37,6 +39,21 @@ public class PlayerController : MonoBehaviour
         horizontalMovement = Input.GetAxis("Horizontal");
         verticalMovement = Input.GetAxis("Vertical");
         r.position += new Vector2( horizontalMovement, verticalMovement) * speed * Time.deltaTime;
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.CompareTag("ObstacleLine"))
+        {
+            ObstacleLine_script obstacle = other.GetComponent<ObstacleLine_script>();
+            
+            if(obstacle.getPassed() == false){
+
+                obstacle.GetComponent<ObstacleLine_script>().setPassed();
+                gm.IncrementScore();
+
+            }
+        }
     }
 
     bool CheckRenderers()
