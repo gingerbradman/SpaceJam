@@ -9,6 +9,8 @@ TagManager:
   - Border
   - Enemy
   - Blank
+  - PlayerBullet
+  - CrossLine
   layers:
   - Default
   - TransparentFX
@@ -23,8 +25,8 @@ TagManager:
   - Hazard
   - Blank
   - Player
-  - 
-  - 
+  - PlayerBullet
+  - CrossLine
   - 
   - 
   - 
