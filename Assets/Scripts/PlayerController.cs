@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,8 +9,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D r;
     private ObjectPooler_script objectPooler;
     public void setR(Rigidbody2D rigidBody){ r = rigidBody;}
-    private float horizontalMovement;
-    private float verticalMovement;
+    public Joystick joystick;
+    private bool isMoving = false;
     private GameManager_script gm;
     public GameManager_script getGM(){return gm;}
 
@@ -28,24 +29,28 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Movement();
-        FireBullet();
     }
 
     void Movement()
     {
-        horizontalMovement = Input.GetAxis("Horizontal");
-        verticalMovement = Input.GetAxis("Vertical");
-        r.position += new Vector2( horizontalMovement, verticalMovement) * speed * Time.deltaTime;
+        if(!Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            isMoving = false;
+            return;
+        }
+
+        isMoving = true;
+
+        r.position += new Vector2(joystick.Horizontal,joystick.Vertical) * speed * Time.deltaTime;
     }
 
-    void FireBullet()
+    //FireBullet Function is called by the Shooting Panel event triggers. 
+    // NOTE: It is very important that the Shooting Panel is above the DirectionPanel in the hierarchy. It will not work any other way.
+    public void FireBullet()
     {
-        if(Input.GetButtonDown("Fire1"))
-        {
-            GameObject clone;
-            clone = objectPooler.SpawnFromPool("PlayerBullet", this.transform.position, this.transform.rotation);
-            clone.GetComponent<Rigidbody2D>().velocity = Vector2.up * 5;
-        }
+        GameObject clone;
+        clone = objectPooler.SpawnFromPool("PlayerBullet", this.transform.position, this.transform.rotation);
+        clone.GetComponent<Rigidbody2D>().velocity = Vector2.up * 5;
     }
 
     void OnTriggerExit2D(Collider2D other)
